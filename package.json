@@ -1,0 +1,29 @@
+{
+  "name": "whatsapp-status-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp bot dedicated to status detection and reactions",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "postinstall": "node scripts/patch-baileys.js || echo patch-baileys ignoré",
+    "lint": "for f in *.js; do node --check \"$f\" || exit 1; done"
+  },
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "@supabase/supabase-js": "^2.100.1",
+    "@whiskeysockets/baileys": "7.0.0-rc14",
+    "@xaviabot/fb-downloader": "^1.0.14",
+    "axios": "^1.15.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "helmet": "^8.0.0",
+    "node-cache": "^5.1.2",
+    "pino": "^9.0.0",
+    "ws": "^8.18.0",
+    "yt-dlp-exec": "^1.0.2",
+    "yt-search": "^2.13.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
