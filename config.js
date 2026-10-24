@@ -1,17 +1,23 @@
-// Copie du bot : remplace chaque valeur « A_REMPLIR » par la tienne avant de
-// déployer. La clé d'accès (apiKey) est celle à saisir dans l'app, Réglages ›
-// Connexion › Clé d'accès.
+// Configuration du bot. Les secrets et identifiants viennent des variables
+// d'environnement du service Render (jamais écrits dans ce fichier) :
+//   API_KEY                    clé d'accès, à saisir dans l'app (Réglages › Connexion)
+//   JWT_SECRET                 secret de signature des JWT (chaîne aléatoire longue)
+//   DOWNLOAD_SECRET            secret des appels machine→machine (chaîne aléatoire longue)
+//   OWNER_NUMBER               ton numéro sans + ni espaces (ex. 2290000000)
+//   WA_PHONE_NUMBER            le même numéro
+//   SUPABASE_URL               https://<ton-projet>.supabase.co
+//   SUPABASE_SERVICE_ROLE_KEY  clé service_role de ta base (secrète)
 const env = process.env;
 
 module.exports = {
     // Clé échangée contre un JWT par POST /api/auth/login.
-    apiKey: "A_REMPLIR_CLE_ACCES_APP",
+    apiKey: env.API_KEY || "",
     // Secret HMAC de signature des JWT.
-    jwtSecret: "-linqBYanyveIYV9RwcOPMHidJAK7-QCLIvA50g-tnU",
+    jwtSecret: env.JWT_SECRET || "",
     apiPort: Number(env.PORT) || 3000,
 
     // Secret partagé pour les appels machine→machine.
-    downloadSecret: "5DQ4hHlxbO8RhzW9WuZaLdQ-oHvrT5_Zocx81aVW7MM",
+    downloadSecret: env.DOWNLOAD_SECRET || "",
 
     // Cookies Instagram (format Netscape) — obligatoires pour télécharger des
     // posts/reels Instagram (l'accès anonyme est bloqué). Vide = indisponible.
@@ -35,7 +41,7 @@ module.exports = {
     },
 
     // List of owner numbers or IDs (LIDs)
-    owners: ["A_REMPLIR_NUMERO_SANS_PLUS"],
+    owners: env.OWNER_NUMBER ? [env.OWNER_NUMBER] : [],
 
     // Array of emojis the bot will randomly choose from to react to statuses
     reactionEmojis: ["🩷", "❤️", "💙", "🖤", "❤️", "🔥", "🤍", "💞", "💕", "💓", "💝", "❤️", "🔥", "🫶", "🙌", "🌚", "🙂", "↔️", "🫶🏼", "👀", "🥺", "😎", "🤩"],
@@ -82,25 +88,12 @@ module.exports = {
 
     // Provide your phone number if using pairing code (e.g., "1234567890")
     // Include the country code but no '+' sign or spaces.
-    phoneNumber: env.WA_PHONE_NUMBER || "A_REMPLIR_NUMERO_SANS_PLUS",
+    phoneNumber: env.WA_PHONE_NUMBER || "",
     
-    // Base Supabase du bot — projet `pnzmntrffvvylgvfwzvy` (l'ancienne base a
-    // été supprimée). Le schéma tient dans une seule table, `whatsapp_auth`
-    // (id + data jsonb), versionnée dans supabase/migrations/.
-    //
-    // Credentials EN DUR et SANS lecture de l'environnement, volontairement :
-    // le service Render conservait des variables pointant vers l'ancienne base,
-    // morte. Tant qu'elles existent, un `env.X || valeur` laisserait le bot
-    // parler à une base supprimée — le verrou n'est jamais obtenu, aucun socket
-    // n'est monté et JosiConnect affiche « canPair: false » pour toujours.
-    //
-    // Conséquence à garder en tête : la clé service_role est lisible dans le
-    // dépôt (le projet est privé). Elle n'ouvre que `whatsapp_auth` — RLS
-    // activée, aucune policy, donc le rôle anon du bundle Flutter n'y accède
-    // pas. Si elle est un jour compromise, il faut la pivoter dans le tableau
-    // Supabase ET mettre à jour cette ligne.
-    supabaseUrl: "https://A_REMPLIR_ID_PROJET.supabase.co",
-    supabaseKey: "A_REMPLIR_CLE_SERVICE_ROLE_SUPABASE",
+    // Base Supabase : une seule table, `whatsapp_auth` (voir supabase/migrations/).
+    // La clé service_role contourne la sécurité des lignes : ne jamais la publier.
+    supabaseUrl: env.SUPABASE_URL || "",
+    supabaseKey: env.SUPABASE_SERVICE_ROLE_KEY || "",
 
     // Anti-Delete settings
     antiDeleteEnabled: true,
