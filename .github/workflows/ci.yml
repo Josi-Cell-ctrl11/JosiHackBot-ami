@@ -14,3 +14,6 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run lint
       - run: node --test test/*.test.js
+        env:
+          SUPABASE_URL: https://example.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: test-only
